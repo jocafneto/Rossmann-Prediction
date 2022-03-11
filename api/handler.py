@@ -1,3 +1,4 @@
+from crypt import methods
 import pickle
 import pandas as pd
 from flask import Flask, request, Response
@@ -9,11 +10,11 @@ model = pickle.load( open( '/home/jocafneto/repositorio/rossmann/model/model_ros
 # initialize API
 app = Flask( __name__ )
 
-@app.route( '/rossmann/predict', method=['POST'] )
+@app.route( '/rossmann/predict', methods=['POST'] )
 def rossmann_predict():
     test_json = request.get_json()
     
-    if test_jason: # there is data
+    if test_json: # there is data
         if isinstance( test_json, dict ): # unique exemple
             test_raw = pd.DataFrame( test_json, index=[0] )
             

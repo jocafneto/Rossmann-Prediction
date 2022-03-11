@@ -1,22 +1,22 @@
 import pickle
+import inflection
 import pandas as pd
 import numpy as np
-import inflection
 import math
 import datetime
 
 class Rossmann( object ):
     def __init__( self ):
-        self.home_path                     = '/home/jocafneto/repositorio/rossmann/'
-        self.competition_distance_scaler   = pickle.load( open( self.home_path + 'parameter/competition_distance_scaler.pkl', 'rb' ) )
-        self.year_scaler                   = pickle.load( open( self.home_path + 'parameter/year_scaler.pkl', 'rb' ) )
-        self.competition_time_month_scaler = pickle.load( open( self.home_path + 'parameter/competition_time_month_scaler.pkl', 'rb' ) )
-        self.promo_time_week_scaler        = pickle.load( open( self.home_path + 'parameter/promo_time_week_scaler.pkl', 'rb' ) )
-        self.store_type_scaler             = pickle.load( open( self.home_path + 'parameter/store_type_scaler.pkl', 'rb' ) )
-
+        self.home_path='/home/jocafneto/repositorio/rossmann/'
+        self.competition_distance_scaler   = pickle.load( open( self.home_path + 'parameter/competition_distance_scaler.pkl', 'rb') )
+        self.competition_time_month_scaler = pickle.load( open( self.home_path + 'parameter/competition_time_month_scaler.pkl', 'rb') )
+        self.promo_time_week_scaler        = pickle.load( open( self.home_path + 'parameter/promo_time_week_scaler.pkl', 'rb') )
+        self.year_scaler                   = pickle.load( open( self.home_path + 'parameter/year_scaler.pkl', 'rb') )
+        self.store_type_scaler             = pickle.load( open( self.home_path + 'parameter/store_type_scaler.pkl', 'rb') )
         
-    def data_cleaning( self, df1 ):
-
+        
+    def data_cleaning( self, df1 ): 
+        
         ## 1.1. Rename Columns
         cols_old = ['Store', 'DayOfWeek', 'Date', 'Open', 'Promo', 'StateHoliday', 'SchoolHoliday', 
                     'StoreType', 'Assortment', 'CompetitionDistance', 'CompetitionOpenSinceMonth',
@@ -49,7 +49,7 @@ class Rossmann( object ):
         df1['promo2_since_year'] = df1.apply( lambda x: x['date'].year if math.isnan( x['promo2_since_year'] ) else x['promo2_since_year'], axis=1 )
 
         #promo_interval              
-        month_map = {1: 'Jan',  2: 'Feb',  3: 'Mar',  4: 'Apr',  5: 'May',  6: 'Jun',  7: 'Jul',  8: 'Aug',  9: 'Sep',  10: 'Oct', 11: 'Nov', 12: 'Dec'}
+        month_map = {1: 'Jan',  2: 'Fev',  3: 'Mar',  4: 'Apr',  5: 'May',  6: 'Jun',  7: 'Jul',  8: 'Aug',  9: 'Sep',  10: 'Oct', 11: 'Nov', 12: 'Dec'}
 
         df1['promo_interval'].fillna(0, inplace=True )
 
@@ -58,7 +58,6 @@ class Rossmann( object ):
         df1['is_promo'] = df1[['promo_interval', 'month_map']].apply( lambda x: 0 if x['promo_interval'] == 0 else 1 if x['month_map'] in x['promo_interval'].split( ',' ) else 0, axis=1 )
 
         ## 1.6. Change Data Types
-
         # competiton
         df1['competition_open_since_month'] = df1['competition_open_since_month'].astype( int )
         df1['competition_open_since_year'] = df1['competition_open_since_year'].astype( int )
@@ -67,10 +66,10 @@ class Rossmann( object ):
         df1['promo2_since_week'] = df1['promo2_since_week'].astype( int )
         df1['promo2_since_year'] = df1['promo2_since_year'].astype( int )
         
-        return df1
-    
+        return df1 
+
+
     def feature_engineering( self, df2 ):
-        ## 2.4. Feature Engineering
 
         # year
         df2['year'] = df2['date'].dt.year
@@ -111,62 +110,65 @@ class Rossmann( object ):
         df2 = df2.drop( cols_drop, axis=1 )
         
         return df2
-    
+
+
     def data_preparation( self, df5 ):
-        ## 5.2 Rescaling
+
+        ## 5.2. Rescaling 
         # competition distance
         df5['competition_distance'] = self.competition_distance_scaler.transform( df5[['competition_distance']].values )
-
+    
         # competition time month
         df5['competition_time_month'] = self.competition_time_month_scaler.transform( df5[['competition_time_month']].values )
 
         # promo time week
-        df5['promo_time_week'] = self.promo_time_week.transform( df5[['promo_time_week']].values )
+        df5['promo_time_week'] = self.promo_time_week_scaler.transform( df5[['promo_time_week']].values )
         
         # year
         df5['year'] = self.year_scaler.transform( df5[['year']].values )
-        
-        ### 5.3.1 Encoding
-        # state holiday - One Hot Encoding
-        df5 = pd.get_dummies(df5, prefix=['state_holiday'], columns=['state_holiday'])
 
-        # store type - Label Encoding
+        ### 5.3.1. Encoding
+        # state_holiday - One Hot Encoding
+        df5 = pd.get_dummies( df5, prefix=['state_holiday'], columns=['state_holiday'] )
+
+        # store_type - Label Encoding
         df5['store_type'] = self.store_type_scaler.transform( df5['store_type'] )
-        
+
         # assortment - Ordinal Encoding
-        assortment_dict = {'basic':1, 'extra':2, 'extended':3}
+        assortment_dict = {'basic': 1,  'extra': 2, 'extended': 3}
         df5['assortment'] = df5['assortment'].map( assortment_dict )
 
-        ### 5.3.3 Nature Transformation
+        
+        ### 5.3.3. Nature Transformation
         # day of week
-        df5['day_of_week_sin'] = df5['day_of_week'].apply( lambda x: np.sin( x * ( 2. * np.pi/7) ) )
-        df5['day_of_week_cos'] = df5['day_of_week'].apply( lambda x: np.cos( x * ( 2. * np.pi/7) ) )
+        df5['day_of_week_sin'] = df5['day_of_week'].apply( lambda x: np.sin( x * ( 2. * np.pi/7 ) ) )
+        df5['day_of_week_cos'] = df5['day_of_week'].apply( lambda x: np.cos( x * ( 2. * np.pi/7 ) ) )
 
         # month
-        df5['month_sin'] = df5['month'].apply( lambda x: np.sin( x * ( 2. * np.pi/12) ) )
-        df5['month_cos'] = df5['month'].apply( lambda x: np.cos( x * ( 2. * np.pi/12) ) )
+        df5['month_sin'] = df5['month'].apply( lambda x: np.sin( x * ( 2. * np.pi/12 ) ) )
+        df5['month_cos'] = df5['month'].apply( lambda x: np.cos( x * ( 2. * np.pi/12 ) ) )
 
-        # day
-        df5['day_sin'] = df5['day'].apply( lambda x: np.sin( x * ( 2. * np.pi/30) ) )
-        df5['day_cos'] = df5['day'].apply( lambda x: np.cos( x * ( 2. * np.pi/30) ) )
+        # day 
+        df5['day_sin'] = df5['day'].apply( lambda x: np.sin( x * ( 2. * np.pi/30 ) ) )
+        df5['day_cos'] = df5['day'].apply( lambda x: np.cos( x * ( 2. * np.pi/30 ) ) )
 
         # week of year
-        df5['week_of_year_sin'] = df5['week_of_year'].apply( lambda x: np.sin( x * ( 2. * np.pi/52) ) )
-        df5['week_of_year_cos'] = df5['week_of_year'].apply( lambda x: np.cos( x * ( 2. * np.pi/52) ) )
+        df5['week_of_year_sin'] = df5['week_of_year'].apply( lambda x: np.sin( x * ( 2. * np.pi/52 ) ) )
+        df5['week_of_year_cos'] = df5['week_of_year'].apply( lambda x: np.cos( x * ( 2. * np.pi/52 ) ) )
         
-        cols_selected = ['store', 'promo', 'store_type', 'assortment', 'competition_distance',
-                         'competition_open_since_month', 'competition_open_since_year', 'promo2',
-                         'promo2_since_week', 'promo2_since_year', 'competition_time_month',
-                         'promo_time_week', 'day_of_week_sin', 'day_of_week_cos', 'month_sin',
-                         'month_cos', 'day_sin', 'day_cos', 'week_of_year_sin', 'week_of_year_cos']
+        
+        cols_selected = [ 'store', 'promo', 'store_type', 'assortment', 'competition_distance', 'competition_open_since_month',
+            'competition_open_since_year', 'promo2', 'promo2_since_week', 'promo2_since_year', 'competition_time_month', 'promo_time_week',
+            'day_of_week_sin', 'day_of_week_cos', 'month_sin', 'month_cos', 'day_sin', 'day_cos', 'week_of_year_sin', 'week_of_year_cos']
         
         return df5[ cols_selected ]
+    
     
     def get_prediction( self, model, original_data, test_data ):
         # prediction
         pred = model.predict( test_data )
         
-        # join pred into original data
+        # join pred into the original data
         original_data['prediction'] = np.expm1( pred )
         
-        return original_data.to_json( oriente='records', data_format='iso' )
+        return original_data.to_json( orient='records', date_format='iso' )
