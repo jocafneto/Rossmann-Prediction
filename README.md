@@ -1,9 +1,9 @@
 # Rossmann Sales Prediction
-A regression project that uses ML Model to predict how much money Rossmann company will receive in the next 6 weeks.
+-  A regression project that uses ML Model to predict how much money Rossmann company will receive in the next 6 weeks.
 
 ## **Empresa:**
 
-  Dirk Rossmann GmbH
+-  Dirk Rossmann GmbH
 
 
 ## **Sobre a Empresa?**
@@ -43,9 +43,9 @@ Em **2019**, a Rossmann teve um faturamento de mais de **€ 10 bilhões** na Al
  * **Promo2Since[Year/Week]:** Descreve o ano e a semana do calendário que a Loja começou a ter promoção extendida.
  * **PromoInterval:** Descreve os 4 meses em que há promoção extendida.
 
-No total a base de **dados** contém **1017209 linhas** com **18 colunas**.
+-  No total a base de **dados** contém **1017209 linhas** com **18 colunas**.
 
-Como **variável resposta** temos a coluna **Sales**.
+-  Como **variável resposta** temos a coluna **Sales**.
 
 ## **Que tipos de perguntas devemos responder?**
 
