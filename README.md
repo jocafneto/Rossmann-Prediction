@@ -26,27 +26,27 @@ Em **2019**, a Rossmann teve um faturamento de mais de **€ 10 bilhões** na Al
 
 ## **Sobre os Dados:**
 
- * **Store:** ID único de cada Store.
- * **Sales:** A quantidade de vendas naquele dia.
- * **Customers:** A quantidade de clientes naquele dia.
- * **Date:** O dia do dado.
- * **DayOfWeek:** Dia da Semana.
- * **Open:** 0 = Loja Fechada; 1 = Loja Aberta.
- * **StateHoliday:** a = Feriado Público; b = Feriado de Páscoa; c = Natal; 0 = None.
- * **SchoolHoliday:** Indica se a Loja naquela data foi afetada pelo fechamento de escolas públicas.
- * **StoreType:** Diferencia entra os 4 tipos de modelo: a; b; c; d.
- * **Assortment:** Indica o tipo de sortimento tem a loja: a = Básico; b = Extra, c = Extendido.
- * **CompetitionDistance:** Indica a distância, em metros, do concorrente mais próximo.
- * **CompetitionOpenSince[Year/Month]:** Indica o ano e mês, aproximados, que o concorrente mais próximo abriu.
- * **Promo:** Indica se a Loja está tendo promoção naquele dia.
- * **Promo2:** Indica se a Loja tem uma promoção extendida: 1 = Loja não participante; 0 = Loja participante.
- * **Promo2Since[Year/Week]:** Descreve o ano e a semana do calendário que a Loja começou a ter promoção extendida.
- * **PromoInterval:** Descreve os 4 meses em que há promoção extendida.
+ * **store:** ID único de cada Store.
+ * **sales:** A quantidade de vendas naquele dia.
+ * **customers:** A quantidade de clientes naquele dia.
+ * **date:** O dia do dado.
+ * **dayofweek:** Dia da Semana.
+ * **open:** 0 = Loja Fechada; 1 = Loja Aberta.
+ * **stateholiday:** a = Feriado Público; b = Feriado de Páscoa; c = Natal; 0 = None.
+ * **schoolholiday:** Indica se a Loja naquela data foi afetada pelo fechamento de escolas públicas.
+ * **storetype:** Diferencia entra os 4 tipos de modelo: a; b; c; d.
+ * **assortment:** Indica o tipo de sortimento tem a loja: a = Básico; b = Extra, c = Extendido.
+ * **competitiondistance:** Indica a distância, em metros, do concorrente mais próximo.
+ * **competitionopensince[year/month]:** Indica o ano e mês, aproximados, que o concorrente mais próximo abriu.
+ * **promo:** Indica se a Loja está tendo promoção naquele dia.
+ * **promo2:** Indica se a Loja tem uma promoção extendida: 1 = Loja não participante; 0 = Loja participante.
+ * **promo2since[year/week]:** Descreve o ano e a semana do calendário que a Loja começou a ter promoção extendida.
+ * **promointerval:** Descreve os 4 meses em que há promoção extendida.
 
 
 
 -  No total a base de **dados** contém **1017209 linhas** com **18 colunas**.
--  Como **variável resposta** temos a coluna **Sales**.
+-  Tem como **variável resposta** a coluna **sales**.
 
 ## **Que tipos de perguntas devemos responder?**
 
